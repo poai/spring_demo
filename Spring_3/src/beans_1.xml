@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+
+	<!--3.Bean的依赖关系
+		.某些Bean的实例化依赖于其它的Bean
+		.使用depends-on 指定Bean所依赖的Bean对象
+		.如果依赖于多个Bean对象使用','分隔
+	  -->
+	<bean id="xiaofen" class="cn.com.zjf.model.User" depends-on="baoma,benchi">
+		
+		<!-- SPEL -->
+		<property name="id" value="#{baoma.id}"></property>
+		<property name="name" value="小奋"></property>
+		<property name="car" ref="baoma"></property>
+	</bean>
+	
+	<!--4.Bean的范围 
+		.通过scope定义Bean的范围
+			》prototype 原型,每次都创建一个新的实例对象
+			》singleton 单例,IOC容器中只存在一个该类的实例(默认值)
+			》request   同一个请求中只有一个实例
+			》session   一个会话中一个实例
+	 -->
+	
+	<bean id="baoma" class="cn.com.zjf.model.Car" scope="prototype">
+		<property name="id" value="200"></property>
+		<property name="name" value="宝马"></property>
+		<property name="price" value="500000"></property>
+	</bean>
+	<bean id="benchi" class="cn.com.zjf.model.Car">
+		<property name="id" value="200"></property>
+		<property name="name" value="奔驰"></property>
+		<property name="price" value="50000"></property>
+	</bean>
+	
+	
+</beans>

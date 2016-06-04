@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+	"http://struts.apache.org/dtds/struts-2.3.dtd">
+<struts>
+	<!-- Spring整合Struts2
+		1.jar:struts2-spring-plugin-2.3.20.jar
+		
+		2.修改工厂类
+			<constant name="struts.objectFactory" value="spring" />
+		3.修改Action的配置
+			class的值为IOC容器中Bean的ID
+			.<action name="index" class="indexAction">
+	 -->
+	<constant name="struts.enable.DynamicMethodInvocation" value="false" />
+	<constant name="struts.devMode" value="true" />
+	
+	<!--1.Struts对象从IOC容器中获取  -->
+	<constant name="struts.objectFactory" value="spring" />
+	
+	<package name="default" namespace="/" extends="struts-default">
+	
+		<!-- 配置Action -->
+		<action name="index" class="indexAction">
+			<result >/WEB-INF/view/index.jsp</result>
+		</action>
+
+	</package>
+</struts>

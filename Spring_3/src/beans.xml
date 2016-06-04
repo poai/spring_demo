@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+
+	<bean id="baoma" class="cn.com.zjf.model.Car">
+		<property name="id" value="100"></property>
+		<property name="name" value="宝马"></property>
+		<property name="price" value="1000000.00"></property>
+	</bean>
+	<!--  
+	<bean id="benchi" class="cn.com.zjf.model.Car">
+		<property name="id" value="101"></property>
+		<property name="name" value="奔驰"></property>
+		<property name="price" value="100000.00"></property>
+	</bean>
+	-->
+	
+	<!--1.autowire(自动装配)
+		default:no(不自动装配);
+		byName:根据属性名称自动装配;
+		byType:根据类型自动装配**如果IOC容器中存在多个同一种类型的实例就报异常
+		constructor:默认使用byType进行注入
+	  -->
+	<bean id="xiaofen" class="cn.com.zjf.model.User" autowire="byName">
+		<property name="id" value="200"></property>
+		<property name="name" value="小奋"></property>
+	</bean>
+	<bean id="xiaoming" class="cn.com.zjf.model.User" autowire="constructor">
+		<constructor-arg value="201" type="java.lang.Integer"></constructor-arg>
+		<constructor-arg value="小明" type="java.lang.String"></constructor-arg>
+	</bean>
+	
+	<!--2.Bean的继承关系 
+		1.子Bean可以继承来自于父Bean的属性
+		2.子Bean可以重写父Bean中的属性
+		3.父Bean使用property 节点配置的属性如果在子Bean中没有对应的属性则报异常
+		4.如果父类Bean只想配置一些默认的参数则可以不需要指定class属性,但是必须制定父类Bean为一个抽象的Bean:abstract="true"
+		5.子Bean并不是继承父Bean的所有的属性(abstract="true",id="parent")
+	-->
+	<bean id="parent" abstract="true">
+		<property name="id" value="500"></property>
+		<property name="name" value="父类的名称"></property>
+	</bean>
+	<bean id="xiaogang" class="cn.com.zjf.model.User" parent="parent">
+		<property name="name" value="小刚"></property>
+	</bean>
+</beans>

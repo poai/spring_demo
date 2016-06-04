@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.2.xsd">
+
+	<!--一、基于注解的bean的配置 
+		1.Spring 提供了如下四种标注的注解用来支持基于注解的bean的配置
+		 	.@Service(value="")
+			.@Controller(value="")
+			.@Repository(value="")
+			.@Component(value="")
+			**可以使用(value="id") 为Bean显示的指定一个id
+			①以上的注解没有没有本质上的区别
+		2.配置自动扫描的包
+	-->
+	
+	<!-- 配置自动扫描的包 
+		①.加入context命名空间
+		②.配置<context:component-scan />
+			base-package:扫描该包及子包下加了特定注解的POJO对象,交给IOC容器进行管理
+		③.默认情况下使用类名作为Bean的id **类名的首字母大写转小写
+		④可选的配置项
+			.resource-pattern="/*/*.class" 过滤指定资源
+			.<context:exclude-filter />
+			.<context:include-filter />
+	-->
+	<context:component-scan base-package="cn.com.zjf" use-default-filters="true">
+		<!-- 配置不扫描指定规则的Bean 
+			type：
+				.annotation		注解类型=>expression="org.springframework.stereotype.Service"
+				.aspectj		切面类型
+				.assignable		特定类型(指定类的子类,实现了特定接口)
+				.custom			指定的类型
+				.regex			正则
+			expression:表达式(全类型||接口||正则)
+		-->
+		<!-- 
+		排除指定的类型 
+		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Service"/>
+		-->
+		<!--
+		包含指定的类型
+			.use-default-filters="false"
+			** 当使用type="annotation"的时候 org.springframework.stereotype.Component包含了(@Service,@Controller,@Repository) 
+		<context:include-filter type="annotation" expression="org.springframework.stereotype.Component"/>、
+		-->
+		
+	</context:component-scan>
+	
+	
+	
+	<!--二、基于注解的关联关系的配置
+		1.配置Bean的范围
+			.@Scope(value="prototype")
+		2.配置自动装配
+			①@Autowired(required=false||true)
+				.默认使用byType进行自动装配,如果存在多个相同类型的Bean则报异常和required无关
+				.required=true 是必须装配的如果不能装配则报异常
+				.可以使用@Qualifier(value="service") 来制定指定自动装配的时使用的Bean
+			
+			②@Resource	javax包下定义的自动装配的注解元素
+			③@Inject	javax包下定义的自动装配的注解元素
+			
+			**用法都是类似的@Resource中直接可以配置name,建议使用Spring包下的注解元素
+			**属性的自动装配不一定需要get||set方法的支持
+			**自动装配也可以加载属性对象的set方法中
+			**set方法可以使用@Qualifier("service")指定通过执行的name进行装配
+		3.初始值
+			.@Value()
+			
+	-->
+	
+	
+	<!-- 三、Spring4.0中新增加的泛型依赖注入
+	
+		父类:
+			public abstract class PageModel<T> {
+				@Autowired
+				@Qualifier("student")
+				protected T t; 
+				public abstract void page();
+			}
+			
+		子类：
+		@Component("studentPage")
+			public class StudentPage extends PageModel<Student>{
+				@Override
+				public void page() {
+					System.out.println(this.t);
+				}
+			}
+	 -->
+
+	<bean id="service1" class="cn.com.zjf.service.StudentService"></bean> 
+	<bean id="service2" class="cn.com.zjf.service.StudentService"></bean> 
+	
+	
+</beans>

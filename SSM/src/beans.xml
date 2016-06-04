@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.2.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.2.xsd">
+
+	<context:component-scan base-package="cn.com.zjf"></context:component-scan>
+	<context:property-placeholder location="classpath:db.properties"/>
+	
+	<!--1.配置C3P0数据源  -->
+	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+		<property name="user" value="${c3p0.User}"></property>
+		<property name="password" value="${c3p0.Password}"></property>
+		<property name="driverClass" value="${c3p0.DriverClass}"></property>
+		<property name="jdbcUrl" value="${c3p0.JdbcUrl}"></property>
+		<property name="maxPoolSize" value="${c3p0.MaxPoolSize}"></property>
+		<property name="checkoutTimeout" value="${c3p0.CheckoutTimeout}"></property>
+	</bean>
+	
+	<!--2.配置SqlSessionFactory  -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<!-- 为 SqlSessionFactory 指定数据源-->
+		<property name="dataSource" ref="dataSource"></property>
+		<!-- 指定MyBatis的配置文件 -->
+		<property name="configLocation" value="classpath:mybatis.xml"></property>
+		<!-- 指定映射文件的路径 
+			*统配一个字符串(不包含/)
+			**统配一个字符串(包含/)
+		-->
+		<property name="mapperLocations" value="classpath:cn/com/**/*.xml"></property> 
+		
+	</bean>
+	<!-- **配置自动扫描的MyBatis映射类 -->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="cn.com.zjf"></property>
+	</bean>
+	
+	<!-- 3.配置事物管理器  -->
+	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource"></property>
+	</bean>
+	<!-- 4.配置声明式事物 -->
+	<tx:annotation-driven transaction-manager="transactionManager"/>
+	
+</beans>

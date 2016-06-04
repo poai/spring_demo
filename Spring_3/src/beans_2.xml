@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<!--5.SPEL(Spring 表达式语言)  
+		语法:#{}
+	-->
+	
+	<bean id="xiaofen" class="cn.com.zjf.model.User">
+		<property name="id" value="#{100+200}"></property>
+		<property name="name" value="#{'小'+'奋'}"></property>
+		<property name="car" value="#{baoma}"></property>
+	</bean>
+
+
+	<bean id="baoma" class="cn.com.zjf.model.Car">
+		<property name="id" value="200"></property>
+		<property name="name" value="宝马"></property>
+		<property name="price" value="#{T(java.lang.Math).PI}"></property>
+	</bean>
+	<!-- 使用PropertyPlaceholderConfigurer 加载外部的属性文件 -->
+	<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="location" value="db.properties"></property>
+	</bean>
+	<!-- 6.配置C3p0数据源 
+			.加载外部数据源属性文件 db.properties
+			.使用${key} 
+	-->
+	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+		<property name="driverClass" value="${jdbc.Driver}"></property>
+		<property name="jdbcUrl" value="${jdbc.Url}"></property>
+		<property name="user" value="${jdbc.User}"></property>
+		<property name="password" value="${jdbc.Password}"></property>
+	</bean>
+	
+</beans>

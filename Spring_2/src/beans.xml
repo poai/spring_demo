@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:c="http://www.springframework.org/schema/c"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.2.xsd">
+
+	<bean id="baoma" class="cn.com.zjf.model.Car">
+		<!-- 属性注入 -->
+		<property name="id" value="100"></property>
+		<property name="name" value="baoma"></property>
+		<property name="price" value="500000.00"></property>
+	</bean>
+	<bean id="benchi" class="cn.com.zjf.model.Car">
+		<!-- 属性注入 -->
+		<property name="id" value="101"></property>
+		<property name="name" value="benchi"></property>
+		<property name="price" value="400000.00"></property>
+	</bean>
+	<!-- User -->
+	<bean id="xiaofen" class="cn.com.zjf.model.User">
+		<property name="id" value="200"></property>
+		<property name="name" value="xiaofen"></property>
+		<!-- 拥有一俩汽车 
+			ref:引用其它Bean对象或者Bean对象的数据
+		-->
+		<!-- 设置级联属性的属性
+			必须在为级联属性赋值之前实例化对象
+		 -->
+		<property name="car" ref="baoma"></property>
+		<property name="car.name" value="小奋的宝马汽车"></property>
+	</bean>
+	
+	<!-- Shop -->
+	<bean id="shop1" class="cn.com.zjf.model.Shop">
+		<property name="id" value="300"></property>
+		<property name="name" value="小奋汽车专卖店"></property>
+		<!-- 关联集合属性 -->
+		<property name="cars" ref="shop_car">
+			<!-- 赋值为NULL 
+				:<null></null>
+			-->
+			<!-- 只使用一次 
+				<list>
+					<ref bean="baoma"/>
+					<ref bean="benchi"/>
+				</list>
+			-->
+			<!-- Map
+				entry:定义一条key-value
+				:<map>
+					<entry ></entry>
+				 </map>
+			 -->
+		</property>
+	</bean>
+	
+	<!-- 使用构造器注入Bean对象 
+		默认情况下:按照构造器中参数的顺序进行赋值操作
+		index:指定索引(从0开始)
+		type:通过类型适配构造器的参数
+		
+	-->
+	<bean id="dazhong" class="cn.com.zjf.model.Car">
+		<constructor-arg value="150000" type="java.lang.Float" index="2"></constructor-arg>
+		<constructor-arg value="102" type="java.lang.Integer"></constructor-arg>
+		<constructor-arg value="大众" type="java.lang.String" ></constructor-arg>
+	</bean>
+	<!-- 使用P命名空间来简化属性注入方式 -->
+	<bean id="daben" class="cn.com.zjf.model.Car" p:id="400" p:name="大奔" p:price="400000.00" />
+	
+	<!-- 使用C命名空间简化构造器注入 -->
+	<bean id="QQ" class="cn.com.zjf.model.Car"  c:id="500" c:name="QQ" c:price="5000" />
+	
+	<!-- 定义公共模块 
+		:引入util命名空间
+	 -->
+	<util:list id="shop_car">
+		<ref bean="baoma"/>
+		<ref bean="benchi"/>
+	</util:list>
+	<!-- 定义属性文件 11
+		prop:定义一个key-value
+	-->
+	<util:properties id="db.properties"> 
+		<prop key="db.driver">com.mysql.jdbc.Driver</prop>
+		<prop key="db.name">root</prop>
+		<prop key="db.pass">root</prop>
+	</util:properties>
+	
+	
+</beans>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<!--7.IOC容器中Bean的生命周期  
+	
+		.调用构造器实例化对象
+		.init初始化的方法
+		.*service(业务代码)
+		.destory
+	
+	-->
+	<bean id="baoma" class="cn.com.zjf.model.Car" scope="singleton" init-method="init" destroy-method="destroy">
+		<property name="id" value="100"></property>
+	</bean>
+		
+	<!--  -->
+	<!-- 8.使用BeanPostProcessor Bean后置处理器
+			.对IOC容器中创建的Bean对象进行后处理操作
+			.IOC 会自动的识别实现或者继承了特定接口或者类的Bean
+			
+			.加入Bean后置处理器之后Bean的生命周期8uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu``
+					.调用构造器实例化对象
+					.postProcessBeforeInitialization
+					.init初始化的方法
+					.postProcessAfterInitialization
+					.*service(业务代码)
+					.destory
+			.所有的Bean都要经过Bean的后置处理器
+			.Bean 的后置处理器有权修改返回的Bean或者属性
+	  -->
+	<bean class="cn.com.zjf.processor.MyBeanPostProcessor"></bean>
+	
+</beans>
